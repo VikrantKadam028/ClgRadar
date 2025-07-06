@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClgRadar - Enhanced College Finder</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      /* FONT & RESET */
+      * {
+        font-family: "poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+        color: #333;
+      }
+
+      /* HERO SECTION */
+      .hero {
+        /* background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        ); */
+        width: auto;
+        color: white;
+        padding: 40px 20px 50px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        height: 230px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.1)" points="0,1000 1000,800 1000,1000"/></svg>');
+        background-size: cover;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: rgb(45, 45, 211);
+      }
+      .hero p {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-top: 14px;
+        color:grey;
+      }
+
+      /* MAIN CONTAINER */
+      .main-container {
+        position: relative;
+        z-index: 10;
+        margin-top: -60px;
+        padding: 20px;
+      }
+      .main-box {
+        background: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        max-width: 1200px;
+        width: 100%;
+        margin: auto;
+        /* box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1); */
+      }
+
+      /* FORM SECTION */
+      .form-section {
+        background: #f9f9fb;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      }
+      .form-section h4 {
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+
+      .form-label {
+        font-weight: 500;
+      }
+      .form-control,
+      .form-select {
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+      }
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 15px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+      .form-check-input:checked + .form-check-label {
+        color: #4b5fea;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 12px 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        color: white;
+        box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+      }
+
+      /* TABLE & RESULTS */
+      .results-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px 15px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        text-align: center;
+      }
+      .results-header h5 {
+        font-size: 1.4rem;
+        font-weight: 600;
+      }
+      .table-responsive {
+        border-radius: 12px;
+        overflow-x: auto;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      }
+      .table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
+      }
+      .table th,
+      .table td {
+        padding: 16px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .table thead th {
+        background: #5551e2;
+        color: white;
+        font-weight: 600;
+      }
+      .table tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+      }
+
+      /* Highlight for top colleges */
+      .top-college {
+        background: linear-gradient(135deg, #fff176 0%, #fdd835 100%);
+      }
+      .rank-icon {
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+        border-radius: 50%;
+        background: #e91e63;
+        color: white;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Badges */
+      .course-name {
+        background: #e0f7fa;
+        color: #00796b;
+        font-size: 0.85rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+      .choice-code {
+        background: #ede7f6;
+        color: #512da8;
+        padding: 5px 10px;
+        font-family: monospace;
+        border-radius: 8px;
+      }
+      .cutoff-rank {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 5px 10px;
+        border-radius: 8px;
+      }
+      .cutoff-percent {
+        background: #fff3e0;
+        color: #f57c00;
+        padding: 5px 10px;
+        border-radius: 8px;
+      }
+
+      /* No results */
+      .no-results {
+        text-align: center;
+        padding: 50px 20px;
+        color: #6c757d;
+      }
+      .no-results i {
+        font-size: 3rem;
+        color: #d1d1d1;
+      }
+
+      /* FOOTER */
+      footer {
+        text-align: center;
+        padding: 40px 20px;
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        margin-top: 80px;
+        font-size: 0.95rem;
+        backdrop-filter: blur(10px);
+      }
+
+      /* MEDIA QUERIES */
+      @media screen and (max-width: 768px) {
+        .hero h1 {
+          font-size: 1.5rem;
+        }
+        .hero{
+            height: 180px;
+            margin-top: 30px;
+        }
+        .form-section {
+          padding: 20px;
+        }
+        .main-box {
+          padding: 30px;
+        }
+        .table th,
+        .table td {
+          padding: 12px 8px;
+          font-size: 0.85rem;
+        }
+        .row>*{
+            padding: 8px;
+        }
+      }
+      
+
+      /* Highlight Top 3 Ranks */
+      .gold-rank {
+        background: linear-gradient(135deg, #fff9c4, #fff176);
+        font-weight: bold;
+      }
+      .silver-rank {
+        background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+        font-weight: bold;
+      }
+      .bronze-rank {
+        background: linear-gradient(135deg, #ffe0b2, #ffcc80);
+        font-weight: bold;
+      }
+      .badge.bg-purple {
+        background-color: #d6a2e8;
+        color: #4a0072;
+      }
+
+      /* Loading Animation */
+      .loading {
+        text-align: center;
+        padding: 60px;
+        color: #6c757d;
+        animation: fadeIn 1s ease-in-out;
+      }
+      .loading i {
+        font-size: 3rem;
+        animation: spin 1s linear infinite;
+        color: #667eea;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .medal-icon {
+        font-size: 1.3rem;
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+
+      /* Badge Base Style */
+      .badge {
+        font-size: 0.875rem;
+        padding: 6px 12px;
+        border-radius: 12px;
+        display: inline-block;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      /* Purple badge for choice code */
+      .bg-purple {
+        background-color: #b39ddb;
+        color: #311b92;
+      }
+
+      /* Highlight top 3 rows */
+      .gold-rank {
+        background: #fff8e1 !important;
+        font-weight: 600;
+      }
+      .silver-rank {
+        background: #f4f4f4 !important;
+        font-weight: 600;
+      }
+      .bronze-rank {
+        background: #ffe0b2 !important;
+        font-weight: 600;
+      }
+
+      /* Optional: Darker table row border for clarity */
+      tr.gold-rank td,
+      tr.silver-rank td,
+      tr.bronze-rank td {
+        border-top: 2px solid #ddd;
+      }
+      .course-name {
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background-color: #e3f2fd; /* Light Blue */
+        color: #0d47a1; /* Dark Blue */
+        display: inline-block;
+        font-size: 0.875rem;
+      }
+
+      .hero h1 img{
+        width: auto;
+        height: 50px;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="hero">
+      <h1><img src="https://cdn-icons-png.flaticon.com/512/1271/1271837.png">ClgRadar</h1>
+      <p>
+        Find your perfect engineering college match based on DSE merit rankings
+      </p>
+    </div>
+
+    <div class="container main-box">
+      <form id="searchForm">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" id="category" required>
+              <option value="">-- Select Category --</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="course" class="form-label">Course</label>
+            <select class="form-select" id="course" required>
+              <option value="">-- Select Course --</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="district" class="form-label">District (Optional)</label>
+            <select class="form-select" id="district">
+              <option value="">-- All Districts --</option>
+              <option value="mumbai">Mumbai</option>
+              <option value="pune">Pune</option>
+              <option value="nagpur">Nagpur</option>
+              <option value="nashik">Nashik</option>
+              <option value="chhatrapati sambhajinagar">
+                Chhatrapati Sambhajinagar
+              </option>
+              <option value="solapur">Solapur</option>
+              <option value="kolhapur">Kolhapur</option>
+              <option value="thane">Thane</option>
+              <option value="sangli">Sangli</option>
+              <option value="amravati">Amravati</option>
+              <option value="nanded">Nanded</option>
+              <option value="satara">Satara</option>
+              <option value="ahmednagar">Ahmednagar</option>
+              <option value="latur">Latur</option>
+              <option value="dhule">Dhule</option>
+              <option value="jalgaon">Jalgaon</option>
+              <option value="akola">Akola</option>
+              <option value="osmanabad">Osmanabad</option>
+              <option value="beed">Beed</option>
+              <option value="parbhani">Parbhani</option>
+              <option value="jalna">Jalna</option>
+              <option value="buldhana">Buldhana</option>
+              <option value="yavatmal">Yavatmal</option>
+              <option value="washim">Washim</option>
+              <option value="hingoli">Hingoli</option>
+              <option value="wardha">Wardha</option>
+              <option value="chandrapur">Chandrapur</option>
+              <option value="gadchiroli">Gadchiroli</option>
+              <option value="gondia">Gondia</option>
+              <option value="bhandara">Bhandara</option>
+              <option value="raigad">Raigad</option>
+              <option value="ratnagiri">Ratnagiri</option>
+              <option value="sindhudurg">Sindhudurg</option>
+              <option value="nandurbar">Nandurbar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Search By:</label>
+            <div>
+              <input type="radio" name="searchMode" value="rank" checked />
+              Merit Rank
+              <input
+                type="radio"
+                name="searchMode"
+                value="percent"
+                class="ms-4"
+              />
+              Percentage
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="value" class="form-label">Enter Value</label>
+            <input
+              type="number"
+              class="form-control"
+              id="value"
+              step="0.01"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Find Best Colleges
+          </button>
+        </div>
+      </form>
+
+      <div id="results" class="mt-4"></div>
+    </div>
+
+    <script>
+      let cutoffData = [];
+
+      async function loadData() {
+        try {
+          const res = await fetch("cutoff_cleaned.json");
+          if (!res.ok) throw new Error("Data fetch failed");
+          cutoffData = await res.json();
+
+          const categories = new Set();
+          const courses = new Set();
+
+          cutoffData.forEach((entry) => {
+            if (entry.Category)
+              categories.add(entry.Category.trim().toUpperCase());
+            if (entry.Course) courses.add(entry.Course.trim());
+          });
+
+          populateSelect("category", [...categories].sort());
+          populateSelect("course", [...courses].sort(), true);
+        } catch (err) {
+          document.getElementById("results").innerHTML =
+            '<div class="alert alert-danger">❌ Failed to load data</div>';
+        }
+      }
+
+      function populateSelect(id, items, lowercase = false) {
+        const select = document.getElementById(id);
+        items.forEach((item) => {
+          const opt = document.createElement("option");
+          opt.value = lowercase ? item.toLowerCase() : item;
+          opt.textContent = item;
+          select.appendChild(opt);
+        });
+      }
+
+      function filterColleges({
+        category,
+        course,
+        district,
+        rank,
+        percent,
+        mode,
+      }) {
+        return cutoffData
+          .filter((entry) => {
+            const entryCategory = entry.Category?.toUpperCase().trim();
+            const entryCourse = entry.Course?.toLowerCase();
+            const entryCollege = entry.College?.toLowerCase();
+            const entryRank = parseInt(entry["Cutoff Rank"]);
+            const entryPercent = parseFloat(entry["Cutoff %"]);
+
+            return (
+              entryCategory === category &&
+              entryCourse.includes(course) &&
+              (!district || entryCollege.includes(district)) &&
+              ((mode === "rank" && rank <= entryRank) ||
+                (mode === "percent" && percent >= entryPercent))
+            );
+          })
+          .sort(
+            (a, b) => parseInt(a["Cutoff Rank"]) - parseInt(b["Cutoff Rank"])
+          );
+      }
+
+      function formatResults(results) {
+        const top15 = results.slice(0, 15);
+        return top15
+          .map((entry, i) => {
+            let rowClass = "",
+              medal = i + 1;
+            if (i === 0) {
+              rowClass = "gold-rank";
+              medal =
+                '<i class="fa-solid fa-award" style="color:#ffd700;font-size:1.6rem;"></i>';
+            } else if (i === 1) {
+              rowClass = "silver-rank";
+              medal =
+                '<i class="fa-solid fa-award" style="color:#c0c0c0;font-size:1.6rem;"></i>';
+            } else if (i === 2) {
+              rowClass = "bronze-rank";
+              medal =
+                '<i class="fa-solid fa-award" style="color:#cd7f32;font-size:1.6rem;"></i>';
+            }
+
+            return `
+          <tr class="${rowClass}">
+            <td>${medal}</td>
+            <td>${entry.College}</td>
+            <td><span class="course-name">${entry.Course}</span></td>
+            <td><span class="badge bg-purple">${entry["Choice Code"]}</span></td>
+            <td><span class="badge bg-success text-white">${entry["Cutoff Rank"]}</span></td>
+            <td><span class="badge bg-warning text-dark">${entry["Cutoff %"]}%</span></td>
+          </tr>
+        `;
+          })
+          .join("");
+      }
+
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const category = document
+            .getElementById("category")
+            .value.trim()
+            .toUpperCase();
+          const course = document
+            .getElementById("course")
+            .value.trim()
+            .toLowerCase();
+          const district = document
+            .getElementById("district")
+            .value.trim()
+            .toLowerCase();
+          const mode = document.querySelector(
+            "input[name='searchMode']:checked"
+          ).value;
+          const value = parseFloat(document.getElementById("value").value);
+
+          if (!category || !course || isNaN(value)) {
+            alert("⚠️ Please fill in all required fields.");
+            return;
+          }
+
+          document.getElementById("results").innerHTML = `
+        <div class="text-center py-4">
+          <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+          <p>Searching colleges...</p>
+        </div>`;
+
+          setTimeout(() => {
+            const results = filterColleges({
+              category,
+              course,
+              district,
+              rank: value,
+              percent: value,
+              mode,
+            });
+
+            if (results.length === 0) {
+              document.getElementById("results").innerHTML = `
+            <div class="text-center py-4 text-muted">
+              <i class="fas fa-search fa-2x"></i>
+              <h4>No matching colleges found</h4>
+            </div>`;
+            } else {
+              document.getElementById("results").innerHTML = `
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>College</th>
+                    <th>Course</th>
+                    <th>Choice Code</th>
+                    <th>Cutoff Rank</th>
+                    <th>Cutoff %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${formatResults(results)}
+                </tbody>
+              </table>
+            </div>`;
+            }
+          }, 400);
+        });
+
+      loadData();
+    </script>
+  </body>
+</html>
