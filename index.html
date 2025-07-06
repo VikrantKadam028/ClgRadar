@@ -16,6 +16,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
@@ -51,6 +52,8 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        border-bottom: 2px solid grey;
+        border-radius: 40px;
       }
       .hero::before {
         content: "";
@@ -274,7 +277,7 @@
           font-size: 1.5rem;
         }
         .hero {
-          height: 150px;
+          height: auto;
           margin-top: 15px;
         }
         .form-section {
@@ -398,6 +401,37 @@
         height: 50px;
         margin-right: 10px;
       }
+
+      .counterBox {
+        text-align: center;
+        font-family: "Poppins", sans-serif;
+        /* margin: 50px auto; */
+      }
+
+      .counterBox p {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .count-badge {
+        display: inline-block;
+        background: #4b5fea;
+        color: #fff;
+        padding: 8px 12px 8px;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: bold;
+        /* min-width: 80px; */
+        margin: 5px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(75, 95, 234, 0.3);
+        transition: transform 0.2s ease;
+      }
+
+      .count-badge:hover {
+        transform: scale(1.05);
+      }
     </style>
   </head>
 
@@ -411,6 +445,12 @@
       <p>
         Find your perfect engineering college match based on DSE merit rankings
       </p>
+
+      <div class="counterBox">
+        <p>
+          Trusted by <span id="visitorCount" class="count-badge">0</span> Users
+        </p>
+      </div>
     </div>
 
     <div class="container main-box">
@@ -502,11 +542,16 @@
         </div>
 
         <div class="row mb-3">
-          <div class="alert alert-info text-center" role="alert" style="font-size:12px;">
+          <div
+            class="alert alert-info text-center"
+            role="alert"
+            style="font-size: 12px"
+          >
             For the best experience on Android/iOS, please switch to Desktop
             Mode.
           </div>
         </div>
+        <!-- <span id="counter">Loading...</span> -->
 
         <div class="text-center">
           <button type="submit" class="btn btn-primary">
@@ -519,6 +564,64 @@
     </div>
 
     <script>
+      const binId = "686a68e28561e97a50327220"; // e.g. 64eac72a8e4aa34df2480ef0
+      const apiKey =
+        "$2a$10$G82qsKghwf9ATxE/5bM1uOy6uqrYWvUALDXyXXrXHxpjzWXEF3uwO"; // keep this safe!
+      const url = `https://api.jsonbin.io/v3/b/${binId}`;
+
+      async function updateVisit() {
+        try {
+          // Get the current count
+          const res = await fetch(url, {
+            method: "GET",
+            headers: {
+              "X-Master-Key": apiKey,
+            },
+          });
+
+          const json = await res.json();
+          let current = json.record.visits || 0;
+          current += 1;
+
+          // Update the new count
+          await fetch(url, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Master-Key": apiKey,
+            },
+            body: JSON.stringify({ visits: current }),
+          });
+
+          document.getElementById("visitorCount").textContent = current;
+          // Example usage (replace with your real visitor count):
+          const realVisitorCount = current; // fetched from backend/API
+          animateCounter(0, realVisitorCount, 1200);
+        } catch (error) {
+          console.error("Counter failed:", error);
+          document.getElementById("visitorCount").textContent = "Unavailable";
+        }
+      }
+
+      updateVisit();
+
+      function animateCounter(from, to, duration = 1000) {
+        const element = document.getElementById("visitorCount");
+        const startTime = performance.now();
+
+        function update(currentTime) {
+          const progress = Math.min((currentTime - startTime) / duration, 1);
+          const currentValue = Math.floor(from + progress * (to - from));
+          element.textContent = currentValue.toLocaleString();
+
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          }
+        }
+
+        requestAnimationFrame(update);
+      }
+
       let cutoffData = [];
 
       async function loadData() {
